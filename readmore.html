@@ -8,10 +8,11 @@
       align-items: center;
       min-height: 100vh;
       margin: 0;
-      background: linear-gradient(135deg, #fbc2eb, #a6c1ee); /* Soft gradient background */
+      background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
       font-family: 'Poppins', sans-serif;
+      overflow: hidden; /* Keep fish contained */
     }
-
+    
     .notification-card {
       background-color: #ff7b9c;
       border-radius: 16px;
@@ -21,14 +22,14 @@
       text-align: center;
       position: relative;
     }
-
+    
     .message-header {
       color: white;
       font-size: 20px;
       font-weight: bold;
       margin-bottom: 15px;
     }
-
+    
     .message-container img {
       width: 100%;
       height: 100%;
@@ -38,11 +39,11 @@
       cursor: pointer;
       transition: transform 0.3s ease-in-out;
     }
-
+    
     .message-container img:hover {
       transform: scale(1.05);
     }
-
+    
     .notification-dot {
       position: absolute;
       top: 10px;
@@ -53,14 +54,14 @@
       border-radius: 50%;
       border: 2px solid #ff7b9c;
     }
-
+    
     .button-container {
       display: flex;
       gap: 12px;
       justify-content: center;
       margin-top: 15px;
     }
-
+    
     .action-button {
       background-color: white;
       border: none;
@@ -74,14 +75,85 @@
       color: #ff7b9c;
       box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
     }
-
+    
     .action-button:hover {
       background-color: #ffecf0;
       transform: translateY(-2px);
     }
+
+    /* Fish Styles */
+    .fish {
+      position: fixed;
+      width: 50px;
+      height: 30px;
+      background-image: url('/api/placeholder/50/30');
+      background-size: contain;
+      background-repeat: no-repeat;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .fish-left {
+      left: -50px;
+      transform: scaleX(-1);
+    }
+
+    .fish-right {
+      right: -50px;
+    }
+
+    /* Fish Animation */
+    @keyframes swimLeft {
+      0% {
+        left: -50px;
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        left: 100%;
+        opacity: 0;
+      }
+    }
+
+    @keyframes swimRight {
+      0% {
+        right: -50px;
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        right: 100%;
+        opacity: 0;
+      }
+    }
+
+    .swim-left {
+      animation: swimLeft 3s ease-in-out;
+    }
+
+    .swim-right {
+      animation: swimRight 3s ease-in-out;
+    }
   </style>
 </head>
 <body>
+  <div class="fish fish-left">
+    <img src="fish1.png" alt="">
+  </div>
+  <div class="fish fish-right">
+    <img src="fish.png" alt="">
+  </div>
+  
   <div class="notification-card">
     <div class="message-header">Read Me! Read Me! Read Me, pls!</div>
     <div class="message-container">
@@ -90,14 +162,14 @@
       </div>
       <div class="notification-dot"></div>
     </div>
-
+    
     <div class="button-container">
       <button class="action-button" onclick="handleClick('profile')">Profile</button>
       <button class="action-button" onclick="handleClick('read')">Read Me</button>
       <button class="action-button" onclick="handleClick('memories')">Our Memories</button>
     </div>
   </div>
-
+  
   <script>
     function handleClick(action) {
       switch(action) {
@@ -105,21 +177,41 @@
           window.location.href="home.html"
           break;
         case 'read':
-         window.location.href="readmore.html"
+          window.location.href="readmore.html"
           break;
         case 'memories':
           window.location.href="memory.html"
           break;
       }
     }
-
+    
     function openLetter() {
       const image = document.getElementById('toggleImage');
       if (image.src.includes("img4.png")) {
-        image.src = "love-letter.jpg"; // Change to an open letter image
+        image.src = "love-letter.jpg";
       } else {
-        image.src = "img4.png"; // Change back to the envelope
+        image.src = "img4.png";
       }
+      
+      // Trigger fish animation
+      animateFish();
+    }
+
+    function animateFish() {
+      const fishLeft = document.querySelector('.fish-left');
+      const fishRight = document.querySelector('.fish-right');
+      
+      // Reset animations by removing and re-adding classes
+      fishLeft.classList.remove('swim-left');
+      fishRight.classList.remove('swim-right');
+      
+      // Trigger reflow
+      void fishLeft.offsetWidth;
+      void fishRight.offsetWidth;
+      
+      // Add animation classes
+      fishLeft.classList.add('swim-left');
+      fishRight.classList.add('swim-right');
     }
   </script>
 </body>

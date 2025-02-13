@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secret Vault</title>
+    <link rel="stylesheet" href="yes_style.css">
+</head>
+<body>
+    <div class="vault" id="vault">
+        <div id="login-screen">
+            <div class="lock-icon">🔒</div>
+            <h1>Enter PIN Code</h1>
+            <div class="heart-container">
+                <img src="img1.jpg" alt="" class="heart-image">
+            </div>
+            <input type="password" id="pin-input" maxlength="4" oninput="updatePinFromInput()" autofocus>
+            <div class="keypad">
+                <div class="key" onclick="addDigit('1')">1</div>
+                <div class="key" onclick="addDigit('2')">2</div>
+                <div class="key" onclick="addDigit('3')">3</div>
+                <div class="key" onclick="addDigit('4')">4</div>
+                <div class="key" onclick="addDigit('5')">5</div>
+                <div class="key" onclick="addDigit('6')">6</div>
+                <div class="key" onclick="addDigit('7')">7</div>
+                <div class="key" onclick="addDigit('8')">8</div>
+                <div class="key" onclick="addDigit('9')">9</div>
+                <div class="key action-key" onclick="clearPin()">C</div>
+                <div class="key" onclick="addDigit('0')">0</div>
+                <div class="key action-key" onclick="checkPin()">✓</div>
+            </div>
+        </div>
+
+        <div class="secret-content" id="secret-content">
+            <div class="hearts">💖 💝 💖</div>
+            <h1>Welcome to Your Special Place!</h1>
+            <div class="message">
+                You've unlocked the secret vault! 
+                Keep this safe place just for you! ✨
+            </div>
+            <img src="/api/placeholder/200/200" alt="Cute Image" class="cute-image">
+            <div class="hearts">💖 💝 💖</div>
+            <button onclick="logout()">Close Vault</button>
+        </div>
+    </div>
+
+    <script>
+        const correctPin = "0818";
+
+        function updatePinFromInput() {
+            const pinInput = document.getElementById("pin-input");
+            if (pinInput.value.length === 4) {
+                setTimeout(checkPin, 300);
+            }
+        }
+
+        function addDigit(digit) {
+            const pinInput = document.getElementById("pin-input");
+            if (pinInput.value.length < 4) {
+                pinInput.value += digit;
+                updatePinFromInput();
+            }
+        }
+
+        function clearPin() {
+            document.getElementById("pin-input").value = "";
+        }
+
+        function checkPin() {
+            const pinInput = document.getElementById("pin-input").value;
+            const loginScreen = document.getElementById("login-screen");
+            const secretContent = document.getElementById("secret-content");
+
+            if (pinInput === correctPin) {
+               window.location.href="home.html"
+            } else {
+                document.getElementById("vault").classList.add("shake");
+                setTimeout(() => {
+                    document.getElementById("vault").classList.remove("shake");
+                }, 500);
+                clearPin();
+            }
+        }
+
+        function logout() {
+            document.getElementById("login-screen").style.display = "block";
+            document.getElementById("secret-content").classList.remove("visible");
+            clearPin();
+        }
+    </script>
+</body>
+</html>

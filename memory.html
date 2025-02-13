@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #f0f0f0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .container {
+      width: 400px;
+      background: #ff99aa;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .camera-container {
+      position: relative;
+      height: 160px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .camera {
+      width: 180px;
+      height: 140px;
+      background: #e0e0e0;
+      border-radius: 10px;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      z-index: 2;
+    }
+
+    .camera:hover {
+      transform: scale(1.05);
+    }
+
+    .camera::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 140px;
+      height: 10px;
+      background: #d0d0d0;
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+
+    .lens {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: #333;
+      border-radius: 50%;
+      border: 8px solid #444;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .flash {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: #f0f0f0;
+      border-radius: 5px;
+      top: 20px;
+      right: 30px;
+    }
+
+    .viewfinder {
+      position: absolute;
+      width: 40px;
+      height: 20px;
+      background: #444;
+      top: 10px;
+      left: 30px;
+    }
+
+    .photos {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding: 20px 0;
+      min-height: 200px;
+    }
+
+    .polaroid {
+      width: 220px;
+      background: white;
+      padding: 10px;
+      padding-bottom: 40px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transform: rotate(-2deg);
+      transition: transform 0.3s ease;
+      position: absolute;
+      opacity: 0;
+      top: -100%;
+    }
+
+    .polaroid img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .polaroid.animate {
+      animation: dropPhoto 1.5s ease forwards;
+    }
+
+    @keyframes dropPhoto {
+      0% {
+        top: 140px;
+        opacity: 0;
+        transform: translateY(-50px) rotate(-2deg);
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        top: 100%;
+        opacity: 1;
+        transform: translateY(0) rotate(-2deg);
+      }
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      background: white;
+      color: #ff99aa;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover {
+      background: #ff7799;
+      color: white;
+    }
+
+    .shutter-sound {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">OUR MEMORIES</div>
+    <div class="camera-container">
+      <div class="camera" onclick="takePhoto()">
+        <div class="viewfinder"></div>
+        <div class="lens"></div>
+        <div class="flash"></div>
+      </div>
+    </div>
+    <div class="photos" id="photoContainer"></div>
+    <div class="buttons">
+      <button class="btn">Profile</button>
+      <button class="btn">Read Me</button>
+      <button class="btn">Our Memories</button>
+    </div>
+  </div>
+
+  <script>
+    
+    const images = [
+      'img6.jpg',
+      'img7.jpg',
+      'img1.jpg',
+      'img8.jpg'
+    ];
+    let currentImage = 0;
+
+    function takePhoto() {
+      // Create flash effect
+      const camera = document.querySelector('.camera');
+      camera.style.backgroundColor = '#ffffff';
+      setTimeout(() => {
+        camera.style.backgroundColor = '#e0e0e0';
+      }, 100);
+
+     
+      const polaroid = document.createElement('div');
+      polaroid.className = 'polaroid';
+      polaroid.innerHTML = `<img src="${images[currentImage % images.length]}" alt="Memory ${currentImage + 1}">`;
+      
+      // Add to container
+      const container = document.getElementById('photoContainer');
+      container.insertBefore(polaroid, container.firstChild);
+
+      // Start animation
+      setTimeout(() => {
+        polaroid.classList.add('animate');
+      }, 50);
+
+      // Manage photos (keep only last 3)
+      const photos = container.getElementsByClassName('polaroid');
+      if (photos.length > 3) {
+        setTimeout(() => {
+          container.removeChild(photos[photos.length - 1]);
+        }, 1500);
+      }
+
+      currentImage++;
+
+      // Adjust positions of existing photos
+      Array.from(photos).forEach((photo, index) => {
+        if (index > 0) {
+          photo.style.transform = `translateY(${index * 220}px) rotate(${-2 + Math.random() * 4}deg)`;
+        }
+      });
+    }
+  </script>
+</body>
+</html>

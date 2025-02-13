@@ -50,19 +50,6 @@
       transform: scale(1.05);
     }
 
-    .camera::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 140px;
-      height: 10px;
-      background: #d0d0d0;
-      border-bottom-left-radius: 5px;
-      border-bottom-right-radius: 5px;
-    }
-
     .lens {
       position: absolute;
       width: 60px;
@@ -95,9 +82,8 @@
     }
 
     .photos {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 20px;
       padding: 20px 0;
       min-height: 200px;
@@ -110,10 +96,16 @@
       padding-bottom: 40px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       transform: rotate(-2deg);
-      transition: transform 0.3s ease;
-      position: absolute;
+      transition: all 0.3s ease;
+      position: relative;
       opacity: 0;
-      top: -100%;
+      cursor: pointer;
+      margin: 0 auto;
+    }
+
+    .polaroid:hover {
+      transform: scale(1.05) rotate(0deg);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
 
     .polaroid img {
@@ -123,22 +115,17 @@
     }
 
     .polaroid.animate {
-      animation: dropPhoto 1.5s ease forwards;
+      animation: dropPhoto 1s ease forwards;
     }
 
     @keyframes dropPhoto {
       0% {
-        top: 140px;
-        opacity: 0;
         transform: translateY(-50px) rotate(-2deg);
-      }
-      50% {
-        opacity: 1;
+        opacity: 0;
       }
       100% {
-        top: 100%;
-        opacity: 1;
         transform: translateY(0) rotate(-2deg);
+        opacity: 1;
       }
     }
 
@@ -162,10 +149,6 @@
       background: #ff7799;
       color: white;
     }
-
-    .shutter-sound {
-      display: none;
-    }
   </style>
 </head>
 <body>
@@ -180,14 +163,17 @@
     </div>
     <div class="photos" id="photoContainer"></div>
     <div class="buttons">
-      <button class="btn">Profile</button>
-      <button class="btn">Read Me</button>
-      <button class="btn">Our Memories</button>
+      <button class="btn" onclick="navigateTo('home.html')">Profile</button>
+      <button class="btn" onclick="navigateTo('readmore.html')">Read Me</button>
+      <button class="btn" onclick="navigateTo('memory.html')">Our Memories</button>
     </div>
   </div>
 
   <script>
-    
+    function navigateTo(page) {
+      window.location.href = page;
+    }
+
     const images = [
       'img6.jpg',
       'img7.jpg',
@@ -197,19 +183,26 @@
     let currentImage = 0;
 
     function takePhoto() {
-      // Create flash effect
+      // Flash effect
       const camera = document.querySelector('.camera');
       camera.style.backgroundColor = '#ffffff';
       setTimeout(() => {
         camera.style.backgroundColor = '#e0e0e0';
       }, 100);
 
-     
       const polaroid = document.createElement('div');
       polaroid.className = 'polaroid';
       polaroid.innerHTML = `<img src="${images[currentImage % images.length]}" alt="Memory ${currentImage + 1}">`;
       
-      // Add to container
+      // Add click handler to remove the photo
+      polaroid.onclick = function() {
+        this.style.transform = 'scale(0.8) rotate(10deg)';
+        this.style.opacity = '0';
+        setTimeout(() => {
+          this.remove();
+        }, 300);
+      };
+
       const container = document.getElementById('photoContainer');
       container.insertBefore(polaroid, container.firstChild);
 
@@ -218,22 +211,7 @@
         polaroid.classList.add('animate');
       }, 50);
 
-      // Manage photos (keep only last 3)
-      const photos = container.getElementsByClassName('polaroid');
-      if (photos.length > 3) {
-        setTimeout(() => {
-          container.removeChild(photos[photos.length - 1]);
-        }, 1500);
-      }
-
       currentImage++;
-
-      // Adjust positions of existing photos
-      Array.from(photos).forEach((photo, index) => {
-        if (index > 0) {
-          photo.style.transform = `translateY(${index * 220}px) rotate(${-2 + Math.random() * 4}deg)`;
-        }
-      });
     }
   </script>
 </body>

@@ -13,11 +13,11 @@
       }
 
       .post-container {
-        width: 800px; /* Doubled from 400px */
+        width: 800px;
         background-color: white;
-        border-radius: 30px; /* Doubled from 15px */
+        border-radius: 30px;
         overflow: hidden;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Increased shadow */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       }
 
       .search {
@@ -29,50 +29,64 @@
         border: 1px solid rgba(255, 255, 255, 0.3);
         padding: 10px;
         width: 100%;
-        border: none; /* Doubled from 12px */
-        margin-bottom: 4px; /* Doubled from 2px */
-        border-radius: 20px; /* Increased radius */
+        border: none;
+        margin-bottom: 4px;
+        border-radius: 20px;
       }
 
       .post-content {
         background-color: #ff7b9c;
-        padding: 24px; /* Doubled from 12px */
-        border-radius: 0 0 20px 20px; /* Increased radius */
+        padding: 24px;
+        border-radius: 0 0 20px 20px;
+      }
+
+      .image-container {
+        width: 100%;
+        height: 400px;
+        overflow: hidden;
+        border-radius: 16px;
+        margin-bottom: 24px;
       }
 
       .main-image {
         width: 100%;
-        height: 400px; /* Doubled from 200px */
+        height: 100%;
         object-fit: cover;
-        border-radius: 16px; /* Doubled from 8px */
-        margin-bottom: 24px; /* Doubled from 12px */
+        transition: transform 0.5s ease;
+        transform-origin: center center;
+        transform: scale(1.2);
+      }
+
+      .image-container:hover .main-image {
+        transform: scale(1);
       }
 
       .user-info {
         display: flex;
         align-items: center;
-        margin-bottom: 24px; /* Doubled from 12px */
+        margin-bottom: 24px;
       }
 
       .profile-pic {
-        width: 80px; /* Doubled from 40px */
-        height: 80px; /* Doubled from 40px */
+        width: 80px;
+        height: 80px;
         border-radius: 50%;
-        margin-right: 20px; /* Doubled from 10px */
+        margin-right: 20px;
+        object-fit: cover;
       }
 
       .button-container {
         display: flex;
-        gap: 20px; /* Doubled from 10px */
+        gap: 20px;
       }
 
       .action-button {
         background-color: white;
         border: none;
-        padding: 16px 32px; /* Doubled from 8px 16px */
-        border-radius: 40px; /* Doubled from 20px */
+        padding: 16px 32px;
+        border-radius: 40px;
         cursor: pointer;
-        font-size: 24px; /* Increased from 14px */
+        font-size: 24px;
         transition: background-color 0.2s;
       }
 
@@ -84,36 +98,38 @@
   <body>
     <div class="post-container">
       <div class="post-content">
-        <img src="img2.jpg" alt="Main post image" class="main-image" />
-        <div>
-        <div class="search-bar">
-          <input type="text" class="search" />
+        <div class="image-container">
+          <img src="img2.jpg" alt="Main post image" class="main-image" />
         </div>
-        <div class="user-info">
-          <img src="img3.jpg" alt="Profile picture" class="profile-pic" />
-          <div class="button-container">
-            <button class="action-button profile-button">Profile</button>
-            <button class="action-button read-more-button">Read More</button>
-            <button class="action-button moments-button">Our Moments</button>
+        <div>
+          <div class="search-bar">
+            <input type="text" class="search" />
+          </div>
+          <div class="user-info">
+            <img src="img9.jpg" alt="Profile picture" class="profile-pic" />
+            <div class="button-container">
+              <button class="action-button profile-button">Profile</button>
+              <button class="action-button read-more-button">Read More</button>
+              <button class="action-button moments-button">Our Moments</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-          document.querySelector(".profile-button").addEventListener("click", function () {
-            window.location.href = "home.html"; // Change to your desired URL
-          });
-      
-          document.querySelector(".read-more-button").addEventListener("click", function () {
-            window.location.href = "readmore.html"; // Change to your desired URL
-          });
-      
-          document.querySelector(".moments-button").addEventListener("click", function () {
-            window.location.href = "memory.html"; // Change to your desired URL
-          });
+      document.addEventListener("DOMContentLoaded", function () {
+        document.querySelector(".profile-button").addEventListener("click", function () {
+          window.location.href = "home.html";
         });
-      </script>
-      
+
+        document.querySelector(".read-more-button").addEventListener("click", function () {
+          window.location.href = "readmore.html";
+        });
+
+        document.querySelector(".moments-button").addEventListener("click", function () {
+          window.location.href = "memory.html";
+        });
+      });
+    </script>
   </body>
 </html>
